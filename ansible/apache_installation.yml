@@ -1,0 +1,36 @@
+---
+- name: Apache Installation through Ansible Playbook
+  hosts: apache
+  
+
+  tasks:
+    - name: Install Apache with Other Packages 
+      yum: 
+        name: "{{ item }}"
+        state: present
+      with_items:
+           - java-1.8.0-openjdk
+           - git
+           - curl
+           - wget
+           - httpd
+         
+    - name: Enable Port in Firewall
+      firewalld:
+         port: 80/tcp
+         permanent: yes
+         state: enabled 
+
+    - name: Start Apache Service
+      service:
+         name: httpd
+         state: started
+
+   
+   
+  
+
+       
+       
+        
+

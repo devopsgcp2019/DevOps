@@ -1,0 +1,49 @@
+---
+- name: Install Jenkins Through Ansible Playbook
+  hosts: jenkinsagent
+  
+
+  tasks:
+    - name: Install Other Packages 
+      yum: 
+        name: "{{ item }}"
+        state: present
+      with_items:
+           - java-1.8.0-openjdk
+           - git
+           - ansible
+           - curl
+           - wget
+           
+    - name: Download jenkins repo
+      command: wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+   
+    - name: Import Jenkins CI key
+      rpm_key:
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+        state: present
+   
+    - name: Install Jenkins
+      yum:
+        name: "jenkins"
+        state: present
+
+    - name: Enable Port in Firewall
+      firewalld:
+         port: 8080/tcp
+         permanent: yes
+         state: enabled 
+
+    - name: Start Jenkins Service
+      service:
+         name: jenkins
+         state: started
+
+   
+   
+  
+
+       
+       
+        
+

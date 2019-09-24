@@ -1,0 +1,11 @@
+---
+
+- name: testing services using loop
+  hosts: testserver
+  tasks:
+    - service:
+        name: "{{item}}"
+        state: started
+      with_items:
+       - crond.service
+       - acpid.service
